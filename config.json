@@ -1,0 +1,7 @@
+{
+    "date_format": "%d %B, %Y"
+    ,
+    "asset_pipeline" : {
+        "enable" : true
+    }
+}
