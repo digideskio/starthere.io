@@ -4,4 +4,8 @@
     "asset_pipeline" : {
         "enable" : true
     }
+    ,
+    "react" : {
+        "layout" : "post"
+    }
 }

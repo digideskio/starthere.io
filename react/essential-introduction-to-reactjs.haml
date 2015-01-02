@@ -1,0 +1,486 @@
+{
+  "date" : "30/12/2014",
+  "title" : "An Essential Introduction to React",
+  "author" : "Jade Dominguez"
+}
+
+
+%h3 Synopsis
+%p.em
+  %a{ href: "http://facebook.github.io/react/" } React
+  is a Javascript library for building interactive web-based user interfaces.
+%p.em
+  %img{ src: '/media/react-logo.png', style: "float:right; margin-left:20px;" }
+  I wrote this introduction to share my enthusiasm for React and to encourage and guide others to try React.
+  I explain how React is different from existing approaches
+  and why React enables better user experiences, improves prototyping speed, and increases developer happiness =D.
+%p.em
+  This is Part 1 &mdash; the essential, conceptual, introduction.
+  %br
+  Part 2 is hands-on and works through getting started with React.
+
+%h3 Audience
+%h4 Intermediate front-end web developers
+%p
+  Especially if you have experience using tools like jQuery, Backbone, Ember.js, Knockout.js, Angular.js, and yes Rails &mdash;
+  get ready to drink the deliciousness that is React blue-colored Kool-aid.
+%h4 Beginner front-end web developers
+%p
+  You should be able to understand the concepts,
+  you just might not fully appreciate the awesomeness because you haven't experienced the
+  FUN of maintaining a reasonably sized front-end code-base.
+
+.hr
+
+%h2 Preface
+%p
+  The kids these days have taking a liking to the Google and Facebook and Apple user experiences.
+  Visually rich, interactive, engaging &mdash; the Web moves forward day by day, inch by inch.
+  And by <em>&ldquo;forward&ldquo;</em> I mean into the depths of absurdity that is client-side Javascript.
+%p
+  This world, this ever changing, chaos-laden world we call the DOM and its best buddy
+  we love to hate &mdash; Javascript &mdash; is raging against humanity's sanity.
+%p
+  Does hope exist? Are intuitive, developer friendly front-end tools possible or is that some kind of oxymoron?
+
+%h2 Background
+%p
+  For 6+ years I have worked with all things web: from PHP spaghetti and Javascript &rdquo;snippets&rdquo; to jQuery, sammy.js, Mustache, Backbone.js, Require.js, to Rails ujs and now most recently React.
+%blockquote
+  &ldquo;I can enthusiastically say only React makes me feel truly empowered to build rich, browser-based user experiences.&ldquo;
+%p
+  Of course jQuery blew my mind when I first discovered it and I am forever grateful to John Resig and the jQuery team.
+  While jQuery helps manage the DOM without blowing one's brains out, it does not directly empower us to build rich user experiences in any sane manner.
+
+
+%h2 What is React?
+%p
+  React is a front-end Javascript library for building highly interactive web-based user interfaces.
+%p
+  React takes a novel approach to front-end web application development.
+  It is unlike jQuery, Backbone, Ember.js, Knockout.js, Angular.js, etc.
+  To fully appreciate how React differs from traditional approaches let's break down how front-end web applications are currently implemented.
+
+
+%h2 The State of Front-end Web Development
+%p The front-end can be separated into four parts:
+%ol.list-big
+  %li
+    %strong User Interface
+    %br The interface in which the user interacts with the application.  
+    Implemented in HTML.
+  %li
+    %strong User Interactions
+    %br The interactions the user carries out.
+    Implemented via Javascript events emitted from the DOM.  
+  %li
+    %strong Application Logic
+    %br Programming logic that resolves user interactions.
+    Implemented in Javascript.
+  %li
+    %strong Data
+    %br The application's pertinent data relative to the user.
+    Possibly from the server and implemented in JSON on the front-end.
+%p
+  Separating these concerns allows us to better manage application complexity.
+  It improves developer productivity by breaking work into discrete application components.
+  In contrast, smashing everything together leads to spaghetti code, tight coupling, and maintenance nightmares.
+
+
+%h2 Common Approaches to Front-end Architecture
+%p
+  With separation of concerns in mind, we develop applications that look like this:
+
+%h3 Unobtrusive jQuery
+.wide
+  .narrow
+    :codeblock
+      HTML:lines
+      <form>
+        <input name="item">
+        <button type="submit">Add Item</button>
+      </form>
+      <ul id="todo-items">
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+      </ul>
+
+      <script>
+          // Now some unobtrusive javascript:
+          $('form').submit(function(e) {
+              e.preventDefault();
+              var content = $('form').find('input').val());
+              $("#todo-items").append($('<li></li>').text(content));
+          })
+      </script>
+%p
+  Unobtrusiveness is good in that the user can load and use the application even if Javascript is disabled; Javascript acts only to <em>enhance</em> the application.
+  Though well intentioned, it severely constrains user interactivity to only the non-essential.
+%p
+  For better or worse, the Web is moving toward rich client-side applications.
+  The more the server is relied upon to bootstrap the application (pre-rendering the HTML with pertinent user data)
+  , the more we have to <em>duplicate</em> functionality on the front-end to provide an interactive user experience.
+
+%h3 jQuery + Templating
+%p
+  How do we show and persist actual user data without pre-rendering the HTML?
+  And what if the HTML is more complex? Enter client-side templates:
+.wide
+  .narrow
+    :codeblock
+      HTML:lines
+      <form>
+        <input name="item">
+        <button type="submit">Add Item</button>
+      </form>
+      <ul id="todo-items"></ul>
+
+      <script id="item-template" type="text/x-template">
+        <li>
+          <span>{{ name }}</span>
+          <img src="some-image">
+          <button class="remove">remove</button>
+        </li>
+      </script>
+
+      <script>
+          var parsedUserData = {
+              "name" : "John Doe",
+              "items" : [
+                  "Item 1",
+                  "Item 2"
+                  "Item 3"
+              ]
+          }
+
+          // Build the list elements dynamically from data using a template.
+          // Caching is important here because 
+          // appending elements into the DOM is expensive.
+          var cache = '';
+          parsedUserData.items.forEach(function(item) {
+              cache += Mustache.render($("#item-template").html(), { name: item });
+          })
+          $("todo-items").append(cache);
+
+          // Activate the "remove" buttons.
+          $("todo-items").on('click', 'button.remove', function() {
+              $(this).parent().remove();
+          })
+
+          $('form').submit(function(e) {
+              e.preventDefault();
+              var content = $('input').val());
+              $("todo-items").append($('<li></li>').text(content));
+          })
+      </script>
+%p
+  Client-side templates allow us to build richer user interfaces modeled by actual user data.
+  But complexity and code footprint is increasing and we still haven't implemented much <em>actual</em> interactivity!
+
+%h3 Backbone
+%p
+  We can use Backbone to model and persist data &mdash; a great library for this purpose.
+  But Backbone implements its view system using jQuery by default so aside from the data improvements, we run into the same HTML/DOM and template issues.
+
+%h3 Knockout.js
+%p
+  knockout.js is a very well executed library and concept.
+  It addresses the mess of binding events to HTML templates and keeping those templates in sync with the data using a concept called &ldquo;declarative binding&rdquo;.
+  It looks like this:
+.wide
+  .narrow
+    :codeblock
+      HTML:lines
+      <section id="main" data-bind="visible: todos().length">
+        <input id="toggle-all" data-bind="checked: allCompleted" type="checkbox">
+        <label for="toggle-all">Mark all as complete</label>
+        <ul id="todo-list" data-bind="foreach: filteredTodos">
+          <li data-bind="css: { completed: completed, editing: editing }">
+            <div class="view">
+              <input class="toggle" data-bind="checked: completed" type="checkbox">
+              <label data-bind="text: title, event: { dblclick: $root.editItem }">
+              </label>
+              <button class="destroy" data-bind="click: $root.remove"></button>
+            </div>
+            <input class="edit"
+              data-bind="value: title, valueUpdate: 'afterkeydown',
+              enterKey: $root.saveEditing, escapeKey: $root.cancelEditing,
+              selectAndFocus: editing, event: { blur: $root.stopEditing }"
+            >
+          </li>
+        </ul>
+      </section>
+
+%p
+  The <code>data-bind</code> attributes you see are declarative statements that tell Javascript how to manage this HTML interface. Data and events are bound to this HTML so when events happen or data changes, the HTML keeps in sync.
+%p
+  But &hellip; this is essentially writing pseudo-Javascript inside HTML data attributes.
+  This is not a win for developer sanity and feels particularly backward to write <em>pseudo anything</em> when native Javascript, in all its glory, is fully available.
+%blockquote
+  &ldquo;Why dis fraud Javascript all up in my HTML, yo?&rdquo;
+
+%h3 Angular.js
+%p
+  Angular.js takes relatively the same approach as knockout.js &mdash; fraud-Javascript programming inside HTML. Angular.js may be powerful, but it is most definitely not an intuitive nor pleasant developer experience in my book.
+
+
+%h2 The Future of Front-end Web Development
+%p
+  What is a poor web-developer to do? Well, step one is realize we have a problem.
+%blockquote
+  &ldquo;HTML has always been tightly coupled to Javascript events and application logic.&rdquo;
+%p
+  Writing code in two or three or eight different places does not magically decouple HTML from Javascript.
+  Here's why:
+%ul.list
+  %li The user interface <em>is</em> the DOM and is necessarily made in HTML.
+  %li User interactions exists entirely and <em>only</em> within the context of the DOM.
+  %li Javascript is the <em>only</em> way to listen to user interaction events.
+  %li Javascript is necessarily where all data and application logic resides.
+%p
+  User events and their responses are necessarily coupled to their originating DOM nodes.
+  If three of four responsibilities necessarily must be implemented in Javascript, why do modern frameworks supercharge <em>HTML</em>?
+%p
+  Why write Javascript <em>using</em> HTML?
+  Why not write HTML <em>using</em> Javascript?
+
+
+%h2 React Builds HTML Views Entirely Using Javascript
+%blockquote
+  &ldquo;Screw it, Javascript All The Things!&rdquo;
+.wide
+  .narrow
+    :codeblock
+      Javascript:lines
+        // Build todo UI in React.
+        React.DOM.div(null
+            , React.DOM.form({ onSubmit: function() { /* handler */ } }
+                , React.DOM.input({ ref: 'input', defaultValue: '' })
+                , React.DOM.button({ type: 'submit'}, 'Add Item')
+            )
+            , React.DOM.ul({ id: 'todo-items' }
+              , React.DOM.li(null
+                  , "item 1"
+                  , React.DOM.button({ onClick: function() { /* handler */ } }
+                      , 'remove'
+                  )
+              )
+              , React.DOM.li(null
+                  , "item 2"
+                  , React.DOM.button({ onClick: function() { /* handler */ } }
+                      , 'remove'
+                  )
+              )
+            )
+        );
+
+%h2 React Embraces Tight Coupling
+
+%p
+  Instead of worrying about interface vs events vs application logic, React simplifies four responsibilities into two:
+
+%ol.list
+  %li Data
+  %li View
+
+%p The work-flow looks like this:
+
+%ol.list-big
+  %li
+    %strong Data
+    %br
+    Data is passed into the View which carries pertinent application data.
+  %li
+    %strong View
+    %br
+    The View bundles interface, user interactions, and application logic all into a
+    %em singular
+    View component.
+  %li
+    %strong Sync
+    %br
+    When the data changes, the View intelligently re-computes itself to reflect the appropriate state.
+
+%p That's it.
+
+%h3 React in Action
+
+.wide
+  .narrow
+    :codeblock
+      HTML:lines
+      <div id="todo"></div>
+      <script>
+        Todo = React.createClass({
+            displayName: 'Todo'
+            ,
+            getInitialState : function() {
+                return { items: [] };
+            }
+            ,
+            // render() contains all the view logic.
+            // When data changes, the entire render() function is re-run.
+            // This allows you to use the full extent of Javascript
+            // to render views based on various states of incoming data.
+            render: function() {
+                var itemNodes;
+
+                // Build the item list elements from incoming state data
+                itemNodes = this.state.items.map(function(item, i) {
+                    return React.DOM.li(null
+                                , item
+                                , React.DOM.button({
+                                        // bind removeItem event handler
+                                        // pass the item index as unique identifier
+                                        onClick: this.removeItem.bind(this, i)
+                                    }
+                                    , 'remove'
+                                )
+                            );
+                }, this);
+
+                // render() needs to return a React.DOM element.
+                // This is the Virtual DOM -- HTML via Javascript!
+                return React.DOM.div(null
+                            // Build the form and bind submit handler
+                            , React.DOM.form({ onSubmit: this.submit }
+                                , React.DOM.input({ ref: 'input', defaultValue: '' })
+                                , React.DOM.button({ type: 'submit'}, 'Add Item')
+                            )
+                            // Build the ul with items we've generated above.
+                            , React.DOM.ul({id: 'todo-items'}, itemNodes)
+                        )
+                ;
+            }
+            ,
+            submit : function(event) {
+                event.preventDefault();
+
+                // get the input value
+                var input = this.refs.input.getDOMNode().value;
+                this.addItem(input);
+            }
+            ,
+            addItem : function(item) {
+                if(item) {
+                    // Add item to the data state
+                    // This automatically triggers a re-render
+                    this.setState({
+                        items: this.state.items.concat(item)
+                    });
+                }
+            }
+            ,
+            removeItem : function(index) {
+                if(index >= 0) {
+                    // clone the items
+                    var items = this.state.items.slice(0);
+
+                    // remove the item
+                    items.splice(index, 1);
+
+                    // Update the data state
+                    // This automatically triggers a re-render
+                    this.setState({ items: items });
+                }
+            }
+        });
+        Todo = React.createFactory(Todo);
+
+        var parsedUserData = {
+            "name" : "John Doe",
+            "items" : [
+                "Item 1",
+                "Item 2",
+                "Item 3"
+            ]
+        }
+
+        // Render the View
+        var view = React.render(Todo(), document.getElementById('todo'));
+
+        // Set the todo items
+        view.setState({ items: parsedUserData.items });
+
+        view.state.items; // <-- holds the todo list state at any given time.
+        // This data may be easily persisted to your application's database.
+      </script>
+%p
+  The interface is kept perfectly in sync with the data.
+  Further, the state of the user and the application is <em>represented as data</em> (more on this in part 2).
+
+.narrow
+  <iframe width="100%" height="200" src="http://jsfiddle.net/plusjade/6agk0ba8/1/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+%blockquote
+  &ldquo;Write HTML using Javascript? That's tacky bro &mdash; SMH&rdquo;
+
+%p Nah bro, not really.
+%p
+  A React View dynamically builds, tracks, and renders all its HTML elements.
+  This enables event handlers and their application logic to be bound <em>at the time of element creation</em>.
+  These bindings &mdash; this coupling &mdash; happens in the same place in the code and does not require indirect referencing like arbitrary CSS class names, remember those?
+%p
+  This directness is intuitive and DRY.
+  It makes the code much easier to understand, prototype, maintain, and refactor.
+%p
+  HTML is fundamentally coupled with Javascript &mdash; time to embrace it.
+
+
+%h3 Virtual DOM
+%p
+  As the View renders and tracks the full state of the DOM, it enables a great advantage
+  &mdash; the most advertised advantage of React &mdash;
+  Virtual DOM Diffing.
+%p
+  React does not actually render the DOM to the browser immediately.
+  The View renders to a middle layer called the Virtual DOM or fake DOM; a fancy way to describe a Javascript representation of the DOM.
+  Basically, you get a kind of Javascript-based mapping that tracks attributes, bindings, and changes.
+%p
+  As your application's data changes, it flows through and re-renders the View.
+  Since the View tracks all changes, it can find the minimal difference between the existing and new state and only change that part.
+%p
+  Once the minimal and optimal changeset is computed, only then does the View touch the real DOM (the DOM rendered in the browser).
+
+%blockquote
+  &ldquo;Manipulating the DOM is one of the slowest things you can possibly do.&rdquo;
+%p
+  This is different from traditional template-based implementations like jQuery, Backbone.js Views, Ember.js, Angular.js, etc.
+  These systems interact nearly entirely with the real DOM.
+  Direct DOM mutation causes
+  %a{ href: "https://developers.google.com/speed/articles/reflow" } browser reflow
+  and is one of the slowest things you can do. More info here:
+%ul
+  %li
+    %a{ href: "http://stackoverflow.com/q/6817093" }
+      Why's the browser DOM still so slow after 10 years of effort?
+  %li
+    %a{ href: "https://developers.google.com/speed/articles/javascript-dom" }
+      Speeding up JavaScript: Working with the DOM
+  %li
+    %a{ href: "https://dev.opera.com/articles/efficient-javascript/?page=3#reflow" }
+      Repaint and reflow
+
+
+%h3 Component Architecture
+%p
+  The benefits I've listed above, the sanity and clarity of keeping necessarily coupled parts in one place &mdash;
+  interface, interactions, application logic and data &mdash; is known as a kind of &ldquo;component architecture&rdquo;.
+%p
+  Components allow you to create self-contained, reusable, composable, and portable user-interface elements.
+%p
+  Prototyping velocity increases because iterative layout changes no longer interfere with discrete Javascript bindings &mdash; they exist in the same function!
+  No need to update CSS class names littered throughout Javascript and HTML and CSS.
+%p
+  Thanks for reading!
+
+%h3 Get Started
+%p
+  Part 2 covers getting started with React.
+  We'll get our hands dirty and work through example React code.
+
+%h2 Part 2
+%p
+  %a{ href: '/react/getting-started-with-reactjs' }
+    Getting Started With React
