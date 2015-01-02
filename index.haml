@@ -1,0 +1,8 @@
+%h1 React.js
+
+%ol
+  - react.all.each do |post|
+    - next if post.shortname == "index"
+    %li
+      %a{ href: post.url }
+        = post.title

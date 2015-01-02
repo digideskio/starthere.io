@@ -1,0 +1,25 @@
+---
+layout: "default"
+---
+
+%h1.header= page.title
+
+.published.narrow
+  Published
+  = page.date
+  by
+  = page.author
+
+= content
+
+.author.narrow
+  %img.avatar{ src: "/media/me.jpg", alt: "jade dominguez picture" }
+  %a{ href: "/jade-dominguez" } Jade Dominguez
+  is a self-taught professional software developer living in Berkeley, CA.
+  Check out his
+  %a{ href: "https://github.com/plusjade" } Open Source code on Github
+  \. Follow
+  %a{ href: "https://twitter.com/plusjade" } @plusjade
+  on Twitter.
+  Or send an old fashioned email to
+  %a{ href: "mailto:plusjade@gmail.com" } plusjade@gmail.com

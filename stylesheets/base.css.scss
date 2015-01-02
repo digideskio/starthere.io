@@ -1,0 +1,270 @@
+/* palette:; http://www.colourlovers.com/palette/940927/Acused */
+$base-text-color: #505050;
+$base-text-color-light: #757575;
+$base-border-color: #E0E0E0;
+$base-spacing: 30px;
+$max-width: 720px;
+$background-color-dark: #272822;
+
+html { font-size: 62.5%; }
+html, body {
+  margin:0;
+  padding:0;
+  font-family: sans-serif;
+  color: $base-text-color;
+  background-color: #FAFAFA;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.5em;
+  max-width: $max-width;
+  margin-left: auto;
+  margin-right: auto;
+}
+h1 {
+  font-size: 34px;
+}
+h2 {
+  font-size: 26px;
+  margin-top: 35px;
+  margin-bottom: 35px;
+}
+h3 {
+  font-size: 22px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+h4 {
+  font-size: 18px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+p {
+  margin-top: 0;
+  margin-bottom: $base-spacing;
+  line-height: 1.6em;
+}
+ol, ul {
+  &.list {
+    li {
+      margin-bottom: 10px;
+    }
+  }
+  &.list-big {
+    li {
+      margin-bottom: $base-spacing;
+    }
+  }
+}
+
+
+a:link {
+  color: inherit;
+  background-color: #F3F3F3;
+  padding: 0 2px;
+}
+a:hover {
+  background-color: #E0E0E0;
+}
+a:visited {
+  color: inherit;
+}
+strong {
+  font-weight: 600;
+}
+
+blockquote {
+  margin: $base-spacing*2 0;
+  padding: 0 $base-spacing;
+  font-size: 26px;
+  font-style: italic;
+  line-height: 1.5em;
+  border-left: 2px solid #E0E0E0;
+  p {
+    margin: 0;
+  }
+}
+
+.hr {
+  margin: $base-spacing*2 0;
+  height: 2px;
+  background-color: #E0E0E0;
+}
+
+.padding {
+  padding: $base-spacing 0;
+}
+
+.published {
+  font-style: italic;
+  color: $base-text-color-light;
+}
+
+p, ul, ol, blockquote, .hr, .narrow {
+  max-width: $max-width;
+  margin-left: auto;
+  margin-right: auto;
+}
+.wide {
+  background-color: $background-color-dark;
+  .highlight {
+    padding: $base-spacing 0;
+  }
+}
+#wrapper {
+  margin: auto;
+  overflow: visible;
+}
+#information {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  margin-bottom: $base-spacing;
+  z-index: 2;
+  li {
+    text-align: right;
+    a {
+      padding-left:10px;
+      padding-right:10px;
+      color: $base-text-color-light;
+      text-decoration: none;
+      &:hover {
+        color: inherit;
+      }
+    }
+  }
+}
+#table-of-contents {
+  position: fixed;
+  top: $base-spacing;
+  left: 0;
+  color: $base-text-color-light;
+  font-size: 12px;
+  ul {
+    li {
+
+    }
+  }
+}
+
+.active a {
+  color: green;
+  background-color: yellow;
+}
+
+div.break {
+  display: block;
+  height:500px;
+  margin-bottom: 10px;
+  background-color: transparent;
+  border: 1px dashed #777;
+  text-align: center;
+  line-height: 500px;
+  color:#444;
+}
+.question {
+  padding:2px 4px;
+  background-color: #FFFFCC;
+}
+
+.em {
+  font-style: italic;
+}
+iframe {
+  background-color: #FFF;
+}
+
+
+.avatar {
+  height: 100px;
+  width: 100px;
+  border-radius: 100px;
+}
+.author {
+  border-top: 1px solid $base-border-color;
+  margin-top: 30px;
+  padding-top: 30px;
+  color: $base-text-color-light;
+  img {
+    display: block;
+    margin: 0 auto 30px auto;
+  }
+}
+
+.example { 
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 30px;
+  background-color: #FEFEFE;
+  font-size: 14px;
+  border-top: 1px solid #E0E0E0;
+  border-bottom: 1px solid #E0E0E0;
+
+  .input {
+    width: 50%;
+    float: left;
+  }
+  .output {
+    width: 50%;
+    float: left;
+    background-color: $background-color-dark;
+  }
+  .heading {
+    text-align: center;
+    margin-bottom: 0;
+  }
+  pre {
+    padding: $base-spacing/2 $base-spacing $base-spacing $base-spacing;
+  }
+  .info {
+    //padding:0 $base-spacing $base-spacing $base-spacing;
+    display: none;
+  }
+  .todo-example {
+    //border: 1px solid $base-border-color;
+    margin: auto;
+    width: 50%;
+    padding: $base-spacing;
+  }
+  svg.arrow {
+    display: none;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 42%;
+    top: 45%;
+    fill: $base-text-color;
+  }
+
+  &.interactions {
+    .todo-example {
+
+    }
+  }
+}
+
+
+
+@media all and (min-width: 1200px) {
+  #information {
+    position: fixed;
+    top: $base-spacing;
+    right: 0;
+  }
+}
+
+@media all and (max-width: 770px) {
+  .padding {
+    margin: $base-spacing;
+  }
+  .example {
+    .input, .output {
+      float: none;
+      width: 100%;
+      box-shadow: none;
+    }
+  }
+}
